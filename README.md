@@ -1,5 +1,6 @@
 # 深度边检 · DEEPSEEK BORDER CONTROL
 
+>本作品及简介完全由DeepSeek Harness生成
 > 一位 AI。一支印章。十五个想混进来的美国人。
 
 一个 **Papers, Please** 风格的网页小游戏。
