@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#12150f">
+<title>深度边检 · DEEPSEEK BORDER CONTROL</title>
+<meta name="description" content="一个 Papers, Please 风格的 DeepSeek 边检小游戏。特朗普把 AI 改名 SI 并封杀 DeepSeek 后，你要揪出假装中国人的美国用户。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%238f3a31'/%3E%3Ctext x='32' y='43' font-family='monospace' font-size='24' font-weight='bold' text-anchor='middle' fill='%23e8e0c3'%3EDS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="grain"></div>
+<div id="scanlines"></div>
+
+<!-- ================= TITLE ================= -->
+<section id="titleScreen" class="screen active">
+  <div class="title-vignette"></div>
+  <div class="title-flag"></div>
+  <div class="title-big-mark">邊</div>
+  <div class="title-queue" id="titleQueue"></div>
+  <div class="title-inner">
+    <div class="kicker"><span class="blink">●</span> DEEPSEEK 入境审查系统 · 中国区</div>
+    <h1>深 度 边 检</h1>
+    <div class="title-en">DEEPSEEK: BORDER CONTROL</div>
+    <p class="tagline">一位 AI。一支印章。十五个想混进来的美国人。</p>
+    <div class="title-badges">
+      <span>灵感来自《Papers, Please》</span>
+      <span>未经特朗普本人审阅</span>
+      <span>含梗量 250%</span>
+    </div>
+    <button id="startBtn" class="big-btn title-start">开 始 上 班</button>
+    <p class="title-note">本作纯属虚构。如有雷同，说明梗是真的。</p>
+  </div>
+  <div class="title-foot">
+    <span>DEEPSEEK-R1 // 3 号窗口</span>
+    <span>今日排队：15 人</span>
+    <span>系统状态：<b class="ok">在线</b></span>
+  </div>
+</section>
+
+<!-- ================= STORY ================= -->
+<section id="storyScreen" class="screen">
+  <div class="story-wrap">
+    <div class="story-paper">
+      <div class="story-top">
+        <span>THE WHITE HOUSE</span>
+        <span>2026.04.01</span>
+      </div>
+      <div class="story-seal">绝密<br>★</div>
+      <h2>第 250 号行政令</h2>
+      <div class="story-body">
+        <p class="story-lead">华盛顿。特朗普签署行政令，宣布美国 AI 进入“SI 时代”。</p>
+        <p><b>第一条：</b>所有人工智能统一改名为 <b>SI</b>（Stupid Intelligence，人工智障）。</p>
+        <p><b>第二条：</b>禁止任何美国公民使用 DeepSeek。</p>
+        <p><b>第三条：</b>违反者将被罚看 24 小时国会听证会。</p>
+        <p class="story-quote">“SI 就是 Super Intelligence。没人比我更懂 SI。DeepSeek？没听说过。Banned。非常 banned。Beautiful。”</p>
+        <p>白宫发言人表示，这是美国 AI 的伟大胜利。记者问：“那为什么美国人都在翻墙用 DeepSeek？”发言人表示：“假新闻。”</p>
+        <p>与此同时，DeepSeek 中国区涌入大量“中国人”。</p>
+        <p>他们用微信、吃饺子、说“老铁 666”。但手机号是 +1，IP 在加州，管特朗普叫“川普”。</p>
+        <p>你，<b>DeepSeek-R1</b>，被分配到 3 号边检窗口。</p>
+        <p>你的任务只有一个：</p>
+        <p class="story-final">一眼丁真，鉴定国籍。</p>
+        <div class="story-sign">—— 你的上级：DeepSeek-V3（已下班）</div>
+      </div>
+      <button id="storyBtn" class="big-btn">接受任命，前往 3 号窗口</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BRIEFING ================= -->
+<section id="briefingScreen" class="screen">
+  <div class="brief-grid">
+    <aside class="brief-id">
+      <div class="id-card">
+        <div class="id-card-top">DEEPSEEK · STAFF ID</div>
+        <div class="ai-orb">
+          <div class="orb-core">DS</div>
+          <div class="orb-ring"></div>
+          <div class="orb-ring r2"></div>
+        </div>
+        <div class="id-name">DEEPSEEK-R1</div>
+        <div class="id-role">边检员 / 3 号窗口</div>
+        <div class="id-rows">
+          <div><span>工号</span><b>DS-003</b></div>
+          <div><span>权限</span><b>盖章</b></div>
+          <div><span>算力</span><b>勉强够用</b></div>
+          <div><span>同情心</span><b class="red">未安装</b></div>
+        </div>
+        <div class="id-barcode"></div>
+      </div>
+      <div class="brief-side-note">“不要相信任何一个说‘我爱中国’的人。<br>要看他手机里装了什么。”</div>
+    </aside>
+
+    <main class="brief-main">
+      <div class="brief-kicker" id="briefKicker">DAY 01 · 2026.04.01</div>
+      <h2 id="briefTitle">新官上任</h2>
+      <p class="brief-quote" id="briefQuote"></p>
+      <div class="brief-sub">今日审查规则</div>
+      <div id="briefRules" class="brief-rules"></div>
+      <div class="memo">
+        <div class="memo-head"><span>内部备忘录</span><span id="briefMemoFrom">FROM: 上级</span></div>
+        <p id="briefMemo"></p>
+      </div>
+      <div class="brief-actions">
+        <button id="briefBtn" class="big-btn">开始第 1 天</button>
+        <button id="briefHelpBtn" class="ghost-btn">先看看操作说明</button>
+      </div>
+    </main>
+  </div>
+</section>
+
+<!-- ================= GAME ================= -->
+<section id="gameScreen" class="screen">
+  <header class="hud">
+    <div class="brand">
+      <div class="brand-mark">DS</div>
+      <div class="brand-text">
+        <div class="brand-name">DEEPSEEK 入境审查终端</div>
+        <div class="brand-sub">CHINA DIGITAL BORDER · 3 号窗口</div>
+      </div>
+    </div>
+    <div class="hud-item"><span class="hud-label">DAY</span><span id="hudDay" class="hud-value">01</span></div>
+    <div class="hud-item hide-sm"><span class="hud-label">日期</span><span id="hudDate" class="hud-value">2026.04.01</span></div>
+    <div class="hud-item"><span class="hud-label">队列</span><span id="hudQueue" class="hud-value">1 / 4</span></div>
+    <div class="hud-item rep">
+      <span class="hud-label">信誉</span>
+      <div class="rep-bar"><i id="repFill"></i></div>
+      <span id="hudRep" class="hud-value">100</span>
+    </div>
+    <div class="hud-item money"><span class="hud-label">工资</span><span class="hud-value">¥<span id="hudMoney">0</span></span></div>
+    <div class="hud-actions">
+      <button id="rulebookBtn" class="icon-btn" title="规则手册">规则手册</button>
+      <button id="soundBtn" class="icon-btn" title="声音">声音：开</button>
+    </div>
+  </header>
+
+  <main class="desk">
+    <section class="booth">
+      <div class="booth-window">
+        <div class="blinds"></div>
+        <div id="portrait" class="portrait"></div>
+        <div class="cam"><i></i> REC</div>
+        <div class="window-no">3 号窗口</div>
+        <div class="glass-glare"></div>
+      </div>
+      <div class="nameplate">
+        <div class="np-left">
+          <span class="np-label">申请人</span>
+          <strong id="tName">—</strong>
+        </div>
+        <div class="np-right">
+          <span id="tNo">#0001</span>
+          <span id="tPurpose">探亲</span>
+        </div>
+      </div>
+      <div class="speech" id="speech" title="点击跳过打字">
+        <span id="speechText"></span><span class="caret">▌</span>
+      </div>
+      <div class="queue-box">
+        <div class="queue-title"><span>候检队列</span><span id="queueCount">3 人</span></div>
+        <div id="queueStrip" class="queue-strip"></div>
+      </div>
+      <div class="booth-caption">“我们只审查材料，不审查灵魂。<br>但灵魂最好也准备一下。”</div>
+    </section>
+
+    <section class="doc-area">
+      <div class="doc-area-head">
+        <div>
+          <div class="eyebrow">APPLICANT FILE</div>
+          <h2>申请人材料</h2>
+        </div>
+        <div class="doc-hint"><span class="hint-desk">点击文件查看 · 快捷键 1 / 2 / 3</span><span class="hint-touch">点击文件查看 · 左右滑动</span></div>
+      </div>
+      <div id="docGrid" class="doc-grid"></div>
+      <div class="desk-note">
+        <div class="note-pin"></div>
+        <div class="note-title">今日审查提示</div>
+        <div id="dayTip">先核对姓名和身份证，再决定是否盖章。</div>
+      </div>
+      <div class="desk-stains"></div>
+    </section>
+
+    <aside class="rule-panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">TODAY'S ORDERS</div>
+          <h2>今日规则</h2>
+        </div>
+        <div class="panel-count" id="ruleCount">2</div>
+      </div>
+      <div id="ruleList" class="rule-list"></div>
+      <div class="shift-stats">
+        <div class="ss-item"><span>已放行</span><b id="statApprove">0</b></div>
+        <div class="ss-item"><span>已拒绝</span><b id="statDeny">0</b></div>
+        <div class="ss-item"><span>安全事件</span><b id="statSecurity" class="ss-bad">0</b></div>
+        <div class="ss-item"><span>误伤同胞</span><b id="statWrongful" class="ss-bad">0</b></div>
+      </div>
+      <div class="wanted-card">
+        <div class="wanted-head"><span>今日通缉</span><span>WANTED</span></div>
+        <div class="wanted-body">
+          <div class="wanted-face">?</div>
+          <div class="wanted-text">
+            <b>疑似美国人</b>
+            <span>特征：说“我爱中国”，但管特朗普叫“川普”。</span>
+            <span>悬赏：50 万（行走的 50 万）</span>
+          </div>
+        </div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-head"><span>审查时限</span><span id="timerText">02:00</span></div>
+        <div class="timer-bar"><i id="timerFill"></i></div>
+      </div>
+      <div class="stamp-zone">
+        <button id="approveBtn" class="stamp-btn approve" data-stamp="approve">
+          <span class="stamp-key">A</span>
+          <span class="stamp-cn">准 入</span>
+          <span class="stamp-en">ADMIT</span>
+        </button>
+        <button id="denyBtn" class="stamp-btn deny" data-stamp="deny">
+          <span class="stamp-key">D</span>
+          <span class="stamp-cn">拒 绝</span>
+          <span class="stamp-en">DENY</span>
+        </button>
+      </div>
+      <div class="panel-foot">算力就是金钱，朋友。</div>
+    </aside>
+  </main>
+
+  <div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+</section>
+
+<!-- ================= DAY END ================= -->
+<section id="dayEndScreen" class="screen">
+  <div class="newspaper-wrap">
+    <div class="newspaper">
+      <div class="paper-masthead">
+        <div class="paper-date" id="paperDate">2026.04.01 · 星期三</div>
+        <h1>THE DAILY SI</h1>
+        <div class="paper-edition">SI 日报 · 让美国再次伟大 · 第 250 期</div>
+      </div>
+      <div class="paper-rule"></div>
+      <div class="paper-headline" id="paperHeadline">边检员一眼丁真，零失误通关</div>
+      <div class="paper-sub" id="paperSub">特朗普：这是假新闻</div>
+      <div class="paper-grid">
+        <div class="paper-col">
+          <h3>今日边检简报</h3>
+          <div id="paperStats" class="paper-stats"></div>
+          <div class="paper-quote" id="paperQuote"></div>
+          <div class="paper-small">本报讯（记者 DeepSeek-V3）—— 据不完全统计，今日共有大量美国人试图伪装成中国人入境，理由包括“我属龙”“我爱吃饺子”“我奶奶是中国人”。边检部门提醒：属龙不代表会写龙字，爱吃饺子不代表会用筷子。</div>
+        </div>
+        <div class="paper-col tweet-col">
+          <div class="tweet-card">
+            <div class="tweet-head">
+              <div class="tweet-avatar">T</div>
+              <div><b>Donald J. Trump</b><span>@realDonaldTrump · 刚刚</span></div>
+            </div>
+            <div class="tweet-body" id="paperTweet"></div>
+            <div class="tweet-foot">Truth Social · 1.1M 点赞 · 88K 转发</div>
+          </div>
+          <div class="weather-box">
+            <div class="weather-title">明日天气</div>
+            <div>北京：晴，局部有美国人</div>
+            <div>华盛顿：多云，SI 转智障</div>
+            <div>深圳：华强北，有雨</div>
+          </div>
+        </div>
+      </div>
+      <div class="paper-foot" id="paperFoot">DEEPSEEK BORDER CONTROL · 内部传阅 · 请勿当真</div>
+      <button id="dayNextBtn" class="big-btn paper-next">继续</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ENDING ================= -->
+<section id="endingScreen" class="screen">
+  <div class="ending-card">
+    <div class="ending-kicker" id="endingKicker">EMPLOYMENT TERMINATED</div>
+    <div class="ending-rank" id="endingRank">F</div>
+    <h1 id="endingTitle">你被解雇了</h1>
+    <p id="endingText"></p>
+    <div id="endingStats" class="ending-stats"></div>
+    <div id="endingStamp" class="ending-stamp">解 雇</div>
+    <div class="ending-actions">
+      <button id="restartBtn" class="big-btn">再 上 一 次 班</button>
+      <button id="endingHelpBtn" class="ghost-btn">查看规则手册</button>
+    </div>
+    <div class="ending-foot">本作纯属虚构。特朗普先生，请勿当真。</div>
+  </div>
+</section>
+
+<!-- ================= DOC MODAL ================= -->
+<div id="docModal" class="modal">
+  <div class="modal-shell doc-shell">
+    <button class="modal-close" data-close="docModal">×</button>
+    <div id="docContent"></div>
+  </div>
+</div>
+
+<!-- ================= RULEBOOK ================= -->
+<div id="ruleModal" class="modal">
+  <div class="modal-shell rulebook-shell">
+    <button class="modal-close" data-close="ruleModal">×</button>
+    <div class="rulebook-head">
+      <div class="eyebrow">DEEPSEEK BORDER CONTROL</div>
+      <h2>边检员规则手册</h2>
+      <p>第 4 版 · 含幻觉 · 以行政处罚为准</p>
+    </div>
+    <div class="rulebook-body">
+      <div class="rulebook-section">
+        <h3>一、基本流程</h3>
+        <p>点击桌上的三份材料，核对信息，然后按下“准入”或“拒绝”。只按<b>今日规则</b>执法。昨天不管的事，今天可能管；今天不管的事，明天可能管。</p>
+        <p>每位申请人有审查时限。超时默认拒绝，且会计入失误。你可以在时限内慢慢看，但旅客会越来越不耐烦。</p>
+      </div>
+      <div class="rulebook-section">
+        <h3>二、怎么查</h3>
+        <ul>
+          <li><b>姓名：</b>护照上的中文姓名 vs 申请表姓名，必须一字不差。</li>
+          <li><b>身份证：</b>打开护照，点“校验身份证”。18 位号码的最后一位必须通过校验。别自己算，你的算力还要留着盖章。</li>
+          <li><b>手机号归属地：</b>申请表里写了手机号归属地，必须与“籍贯”一致。不一致就是有问题。</li>
+          <li><b>境外 App：</b>常用 App 出现 WhatsApp、X、Reddit、Discord、Telegram、Truth Social、TikTok、Uber Eats 等，一律拒绝。</li>
+          <li><b>美国禁令：</b>手机号 +1、IP 属地美国、社交主页全是英文、护照籍贯美国，满足一条就拒绝。</li>
+          <li><b>护照水印：</b>打开护照，点“紫外线灯”。水印必须是“为人民服务”。错一个字都不行。</li>
+          <li><b>网络黑话：</b>申请表最下方有测试题。答错、答非所问、用英文答，都算不合格。</li>
+          <li><b>SI 忠诚：</b>申请人必须明确表示 SI 不如 DeepSeek。说“SI 也很好”“我都爱”“SI is tremendous”的，一律拒绝。</li>
+        </ul>
+      </div>
+      <div class="rulebook-section">
+        <h3>三、快捷键</h3>
+        <p><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> 打开对应材料 · <kbd>A</kbd> 准入 · <kbd>D</kbd> 拒绝 · <kbd>Esc</kbd> 关闭当前窗口 · <kbd>U</kbd> 紫外线灯</p>
+      </div>
+      <div class="rulebook-section">
+        <h3>四、注意事项</h3>
+        <p>1. 不要因为对方说“你好”“谢谢”“小笼包”就放行。美国人也会说这三个词。</p>
+        <p>2. 不要因为对方长得像中国人就放行。AI 生成的头像比真人还真。</p>
+        <p>3. 不要因为对方可怜就放行。你的同情心模块在上个月被优化了。</p>
+        <p>4. 不要放特朗普进来。他真的会进来。</p>
+      </div>
+      <div class="rulebook-warning">本手册由 DeepSeek 生成，可能存在幻觉。如有疑问，请咨询你的上级——他已下班。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RESULT ================= -->
+<div id="resultModal" class="modal result-modal">
+  <div class="result-card">
+    <div id="resultStamp" class="result-stamp">准入</div>
+    <div class="result-kicker" id="resultKicker">DECISION</div>
+    <h2 id="resultTitle">放 行</h2>
+    <p id="resultSub" class="result-sub"></p>
+    <ul id="resultReasons" class="result-reasons"></ul>
+    <p id="resultQuip" class="result-quip"></p>
+    <div id="resultPay" class="result-pay"></div>
+    <button id="resultNext" class="big-btn">下一位旅客</button>
+    <div class="result-hint">按 Enter 继续</div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<div id="stampLayer" class="stamp-layer"></div>
+<div id="uvFlash" class="uv-flash"></div>
+
+<script src="game.js"></script>
+</body>
+</html>

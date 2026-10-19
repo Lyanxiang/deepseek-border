@@ -1,0 +1,10 @@
+const fs = require('fs');
+const path = require('path');
+const dir = __dirname;
+let html = fs.readFileSync(path.join(dir, 'index.html'), 'utf8');
+const css = fs.readFileSync(path.join(dir, 'style.css'), 'utf8');
+const js = fs.readFileSync(path.join(dir, 'game.js'), 'utf8');
+html = html.replace('<link rel="stylesheet" href="style.css">', () => `<style>\n${css}\n</style>`);
+html = html.replace('<script src="game.js"></script>', () => `<script>\n${js}\n</script>`);
+fs.writeFileSync(path.join(dir, 'deepseek-border.html'), html);
+console.log('built deepseek-border.html', (Buffer.byteLength(html) / 1024).toFixed(1) + ' KB');
